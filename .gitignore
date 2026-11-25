@@ -1,0 +1,5 @@
+__pycache__/
+*.py[cod]
+data/spnmf_anchor/
+data/image_benchmarks/
+results/embedding_cache/

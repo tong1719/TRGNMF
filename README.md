@@ -14,4 +14,5 @@ Place the datasets listed in `data/README.md` under `data/spnmf_anchor/` and `da
 python run_validated_gate.py all --data-dir data/spnmf_anchor
 ```
 
+The experiment records used in the paper are provided in `results.zip`.
 
