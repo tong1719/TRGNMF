@@ -53,16 +53,18 @@ def runtime(input_dir: Path, output_dir: Path) -> list[dict[str, object]]:
         records = json.loads(path.read_text(encoding="utf-8"))
         if not records:
             continue
+        observed_seconds = float(
+            np.mean([record["observed_seconds"] for record in records])
+        )
+        trgnmf_seconds = float(
+            np.mean([record["TRGNMF_seconds"] for record in records])
+        )
         rows.append(
             {
                 "dataset": path.stem,
                 "runs": len(records),
-                "observed_seconds": float(
-                    np.mean([record["observed_seconds"] for record in records])
-                ),
-                "TRGNMF_seconds": float(
-                    np.mean([record["TRGNMF_seconds"] for record in records])
-                ),
+                "observed_seconds": observed_seconds,
+                "TRGNMF_seconds": trgnmf_seconds,
                 "NMF_seconds": float(np.mean([record["NMF_seconds"] for record in records])),
                 "absolute_overhead_seconds": float(
                     np.mean(
@@ -82,9 +84,8 @@ def runtime(input_dir: Path, output_dir: Path) -> list[dict[str, object]]:
                         ]
                     )
                 ),
-                "overhead_ratio": float(
-                    np.mean([record["overhead_ratio"] for record in records])
-                ),
+                # Match the ratio to the mean times reported in this row.
+                "overhead_ratio": trgnmf_seconds / observed_seconds,
             }
         )
     if rows:
@@ -116,3 +117,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
